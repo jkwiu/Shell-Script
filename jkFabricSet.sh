@@ -70,8 +70,9 @@ installHLF(){
 	cd $GOPATH/src/github.com/hyperledger
 	git clone https://github.com/hyperledger/fabric.git
 	cd $GOPATH/src/github.com/hyperledger/fabric
-	make
 	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric" $HOME/.profile
+	. $HOME/.profile
+	cd $FABRIC_HOME && make
 	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile
 	. $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
@@ -100,7 +101,7 @@ echo -e "\e[197mOS Code Name\e[0m			$OS_CODENAME"
 echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
-#aptToolInstall
+aptToolInstall
 #goInstall
 #installDocker
 installHLF
