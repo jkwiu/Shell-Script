@@ -5,59 +5,65 @@ OS_ID=""
 OS_CODENAME=""
 CPU_ARCH=""
 
-apt update
-
-echo "apt update && apt upgrade"
+echo -e "\e[32mapt update && apt upgrade\e[0m"
 apt-get update -y && apt-get --assume-yes upgrade
 
-echo "install virtualbox extention"
-apt-get --assume-yes install virtualbox-guest-dkms
-apt-get --assume-yes install linux-headers-virtual
+# echo "install virtualbox extention"
+# apt-get --assume-yes install virtualbox-guest-dkms
+# apt-get --assume-yes install linux-headers-virtual
 
-echo "Then, Change the VM option : 장치 -> 양방향"
+# echo "Then, Change the VM option : 장치 -> 양방향"
 
-echo "Install VIM"
+echo -e "\e[32mInstall VIM\e[0m"
 
 apt-get install --assume-yes vim
 
-echo "Install git, curl, libltdl-dev, tree, openssh-server, net-tools"
+echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[30mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m"
 
 apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools -y
 
 goInstall(){
-	        echo "Install Golang"
+	        echo -e "\e[32mInstall Golang\e[0m"
 		wget -P $HOME/Downloads  https://dl.google.com/go/go1.12.5.${OS}-${CPU_ARCH}.tar.gz
 		tar -C /usr/local -xzf $HOME/Downloads/go1.12.5.${OS}-${CPU_ARCH}.tar.gz
-		sed -i "\$aexport GOROOT=/usr/local/go/bin" $HOME/.profile
+		sed -i "\$aexport GOROOT=/usr/local/go/" $HOME/.profile
 		. $HOME/.profile
 		mkdir -p $HOME/work/go/{src,pkg,bin}
 		sed -i "\$aexport GOPATH=\$HOME/work/go" $HOME/.profile
 		sed -i "\$aexport PATH=\$PATH:$GOROOT/bin" $HOME/.profile
-		echo "Go install finished."
+		echo -e "\e[32mGo install finished.\e[0m"
+		cd $HOME
 }
 
 installDocker(){
-	echo "Install Docker"
+	echo -e "\e[32mInstall Docker\e[0m"
 	if [ $OS_ID=="ubuntu" ]; then
-		wget -P ./docker.deb https://download.docker.com/$OS/$OS_ID/dists/$OS_CODENAME/pool/stable/$CPU_ARCH/docker-ce_18.09.6~3-0~ubuntu-xenial_amd64.deb
-		dpkg -i ./docker.deb/docker-ce_18.09.6~3-0~ubuntu-xenial_amd64.deb
+		wget -P ./docker.deb https://download.docker.com/$OS/$OS_ID/dists/$OS_CODENAME/pool/stable/$CPU_ARCH/containerd.io_1.2.4-1_amd64.deb
+		wget -P ./docker.deb https://download.docker.com/$OS/$OS_ID/dists/$OS_CODENAME/pool/stable/$CPU_ARCH/docker-ce-cli_18.09.3~3-0~ubuntu-bionic_amd64.deb
+		wget -P ./docker.deb https://download.docker.com/$OS/$OS_ID/dists/$OS_CODENAME/pool/stable/$CPU_ARCH/docker-ce_18.09.3~3-0~ubuntu-bionic_amd64.deb
+		wget -P ./docker.deb http://kr.archive.ubuntu.com/ubuntu/pool/main/libt/libtool/libltdl7_2.4.6-2_amd64.deb
+		sudo dpkg -i ./docker.deb/containerd.io_1.2.4-1_amd64.deb
+		sudo dpkg -i ./docker.deb/libltdl7_2.4.6-2_amd64.deb
+		sudo dpkg -i ./docker.deb/docker-ce-cli_18.09.3~3-0~ubuntu-bionic_amd64.deb
+		sudo dpkg -i ./docker.deb/docker-ce_18.09.3~3-0~ubuntu-bionic_amd64.deb
 	fi
-		usermod -aG docker $(whoami)
-		echo "Docker install finished."
+	sudo usermod -aG docker $(whoami)
 	docker run hello-world
-																			installDockerCompose
+	echo -e "\e[32mDocker install finished\e[0m"
+	installDockerCompose
 }
 
 installDockerCompose(){
-	echo "Install Docker Compose"
-	if [ $ OS=="linux" ]; then
-		sudo curl -L "https://github.com/docker/compose/release/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	echo -e "\e[32mInstall Docker Compose\e[0m"
+	if [ $OS=="linux" ]; then
+		sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo chmod +x /usr/local/bin/docker-compose
 	fi
-	echo "Docker Compose install finished."
+	echo -e "\e[32mDocker Compose install finished.\e[0m"
 }
 
 installHLF(){
-	echo "Install Hyperledger Fabric 1.4"
+	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
 	mkdir -p $GOPATH/src/github.com/hyperledger
 	cd $GOPATH/src/github.com/hyperledger
 	git clone https://github.com/hyperledger/fabric.git
@@ -66,7 +72,7 @@ installHLF(){
 	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric"
 	sed -i "\$aexport PATH=\$PATH:$GOPATH/srcc/github.com/hyperledger/fabric/.build/bin"
 	. $HOME/.profile
-	echo "HLF install finished."
+	echo -e "\e[32mHLF install finished.\e[0m"
 }
 
 
@@ -85,16 +91,15 @@ fi
         x86_64) CPU_ARCH="amd64" ;;
         arm)    dpkg --print-architecture | grep -q "arm64" && CPU_ARCH="arm64" || CPU_ARCH="arm" ;;
    esac
-echo "System Detected."
-echo "OS(Operation System)		$OS"
-echo "OS Type				$OS_ID"
-echo "OS Code Name			$OS_CODENAME"
-echo "CPU Architecture			$CPU_ARCH"
+echo -e "\e[197mSystem Detected.\e[0m"
+echo -e "\e[197mOS(Operation System)\e[0m		$OS"
+echo -e "\e[197mOS Type\e[0m				$OS_ID"
+echo -e "\e[197mOS Code Name\e[0m			$OS_CODENAME"
+echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
 goInstall
 installDocker
-installDockerCompose
 					
 
 
