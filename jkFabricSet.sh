@@ -19,9 +19,9 @@ echo -e "\e[32mInstall VIM\e[0m"
 
 apt-get install --assume-yes vim
 
-echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[37mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m"
+echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[37mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m, \e[38mmake\e[0m"
 
-apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools -y
+apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools make -y
 }
 
 goInstall(){
@@ -72,7 +72,7 @@ installHLF(){
 	cd $GOPATH/src/github.com/hyperledger/fabric
 	make
 	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric" $HOME/.profile
-	sed -i "\$aexport PATH=\$PATH:$GOPATH/srcc/github.com/hyperledger/fabric/.build/bin" $HOME/.profile
+	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile
 	. $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
 }
