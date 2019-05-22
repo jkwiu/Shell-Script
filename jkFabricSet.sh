@@ -14,13 +14,15 @@ apt-get update -y && apt-get --assume-yes upgrade
 
 # echo "Then, Change the VM option : 장치 -> 양방향"
 
+aptToolInstall(){
 echo -e "\e[32mInstall VIM\e[0m"
 
 apt-get install --assume-yes vim
 
-echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[30mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m"
+echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[37mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m"
 
 apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools -y
+}
 
 goInstall(){
 	        echo -e "\e[32mInstall Golang\e[0m"
@@ -69,8 +71,8 @@ installHLF(){
 	git clone https://github.com/hyperledger/fabric.git
 	cd $GOPATH/src/github.com/hyperledger/fabric
 	make
-	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric"
-	sed -i "\$aexport PATH=\$PATH:$GOPATH/srcc/github.com/hyperledger/fabric/.build/bin"
+	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric" $HOME/.profile
+	sed -i "\$aexport PATH=\$PATH:$GOPATH/srcc/github.com/hyperledger/fabric/.build/bin" $HOME/.profile
 	. $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
 }
@@ -98,8 +100,11 @@ echo -e "\e[197mOS Code Name\e[0m			$OS_CODENAME"
 echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
-goInstall
-installDocker
+#aptToolInstall
+#goInstall
+#installDocker
+installHLF
+
 					
 
 
