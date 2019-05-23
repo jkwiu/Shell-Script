@@ -5,8 +5,6 @@ OS_ID=""
 OS_CODENAME=""
 CPU_ARCH=""
 
-echo -e "\e[32mapt update && apt upgrade\e[0m"
-apt-get update -y && apt-get --assume-yes upgrade
 
 # echo "install virtualbox extention"
 # apt-get --assume-yes install virtualbox-guest-dkms
@@ -15,7 +13,8 @@ apt-get update -y && apt-get --assume-yes upgrade
 # echo "Then, Change the VM option : 장치 -> 양방향"
 
 aptToolInstall(){
-echo -e "\e[32mInstall VIM\e[0m"
+echo -e "\e[32mapt update && apt upgrade\e[0m"
+apt-get update -y && apt-get --assume-yes upgradeecho -e "\e[32mInstall VIM\e[0m"
 
 apt-get install --assume-yes vim
 
@@ -66,15 +65,10 @@ installDockerCompose(){
 
 installHLF(){
 	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
-	mkdir -p $GOPATH/src/github.com/hyperledger
-	cd $GOPATH/src/github.com/hyperledger
-	git clone https://github.com/hyperledger/fabric.git
-	cd $GOPATH/src/github.com/hyperledger/fabric
-	sed -i "\$aexport FABRIC_HOME=$GOPATH/src/github.com/hyperledger/fabric" $HOME/.profile
-	. $HOME/.profile
-	cd $FABRIC_HOME && make
-	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile
-	. $HOME/.profile
+        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/jk/work/go/src/github.com/hyperledger/fabric
+	sed -i "\$aexport FABRIC_HOME=/home/jk/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
+      	cd $GOPATH/src/github.com/hyperledger/fabric  && make
+	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile  &&  . $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
 }
 
@@ -102,7 +96,7 @@ echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
 aptToolInstall
-#goInstall
+goInstall
 #installDocker
 installHLF
 
