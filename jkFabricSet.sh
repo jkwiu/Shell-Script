@@ -49,7 +49,7 @@ installDocker(){
 		sudo dpkg -i ./docker.deb/docker-ce-cli_18.09.3~3-0~ubuntu-bionic_amd64.deb
 		sudo dpkg -i ./docker.deb/docker-ce_18.09.3~3-0~ubuntu-bionic_amd64.deb
 	fi
-	USER=$(whoami)
+	USER=`logname`
 	sudo usermod -aG docker $USER
 	sudo service docker restart
 	echo -e "\e[32mDocker install finished\e[0m"
@@ -67,7 +67,7 @@ installDockerCompose(){
 
 
 installHLF(){
-	USER=$(whoami)
+	USER=`logname`
 	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
         sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/$USER/work/go/src/github.com/hyperledger/fabric
 	sed -i "\$aexport FABRIC_HOME=/home/$USER/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
