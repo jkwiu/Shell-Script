@@ -13,8 +13,9 @@ CPU_ARCH=""
 # echo "Then, Change the VM option : 장치 -> 양방향"
 
 aptToolInstall(){
-echo -e "\e[32mapt update && apt upgrade\e[0m"
-apt-get update -y && apt-get --assume-yes upgradeecho -e "\e[32mInstall VIM\e[0m"
+echo -e "\e[32mapt update" #&& apt upgrade\e[0m"
+apt-get update -y #&& apt-get --assume-yes upgrade
+echo -e "\e[32mInstall VIM\e[0m"
 
 apt-get install --assume-yes vim
 
@@ -49,7 +50,7 @@ installDocker(){
 		sudo dpkg -i ./docker.deb/docker-ce_18.09.3~3-0~ubuntu-bionic_amd64.deb
 	fi
 	sudo usermod -aG docker $(whoami)
-	docker run hello-world
+	sudo service docker restart
 	echo -e "\e[32mDocker install finished\e[0m"
 	installDockerCompose
 }
@@ -63,11 +64,18 @@ installDockerCompose(){
 	echo -e "\e[32mDocker Compose install finished.\e[0m"
 }
 
+
 installHLF(){
 	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
-        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/jk/work/go/src/github.com/hyperledger/fabric
-	sed -i "\$aexport FABRIC_HOME=/home/jk/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
-      	cd $GOPATH/src/github.com/hyperledger/fabric  && make
+        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/$(whoami)/work/go/src/github.com/hyperledger/fabric
+	sed -i "\$aexport FABRIC_HOME=/home/$(whoami)/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
+      	 cd $FABRIC_HOME
+		   case $(hostname) in
+		   		peer) make - peer;;
+				orderer) make - orderer;;
+				kafka-zookeeper) make - docker-thirdparty;;
+		   esac
+
 	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile  &&  . $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
 }
@@ -97,7 +105,7 @@ fi
 
 aptToolInstall
 goInstall
-#installDocker
+installDocker
 installHLF
 
 					
