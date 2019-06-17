@@ -73,9 +73,9 @@ installHLF(){
 	sed -i "\$aexport FABRIC_HOME=/home/$USER/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
       	 cd $FABRIC_HOME
 		   case $(hostname) in
-		   		peer) make - peer;;
-				orderer) make - orderer;;
-				kafka-zookeeper) make - docker-thirdparty;;
+		   		peer*) make - peer;;
+				orderer*) make - orderer;;
+				kafka-zookeeper*) make - docker-thirdparty;;
 		   esac
 
 	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile  &&  . $HOME/.profile
