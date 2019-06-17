@@ -14,14 +14,14 @@ CPU_ARCH=""
 
 aptToolInstall(){
 echo -e "\e[32mapt update" #&& apt upgrade\e[0m"
-apt-get update -y #&& apt-get --assume-yes upgrade
+sudo apt-get update -y #&& apt-get --assume-yes upgrade
 echo -e "\e[32mInstall VIM\e[0m"
 
-apt-get install --assume-yes vim
+sudo apt-get install --assume-yes vim
 
 echo -e "\e[32mInstall\e[0m \e[31mgit\e[0m, \e[37mcurl\e[0m, \e[33mlibltdl-dev\e[0m, \e[34mtree\e[0m, \e[35mopenssh-server\e[0m, \e[36mnet-tools\e[0m, \e[38mmake\e[0m"
 
-apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools make -y
+sudo apt-get install --assume-yes git curl libltdl-dev tree openssh-server net-tools make -y
 }
 
 goInstall(){
@@ -49,7 +49,8 @@ installDocker(){
 		sudo dpkg -i ./docker.deb/docker-ce-cli_18.09.3~3-0~ubuntu-bionic_amd64.deb
 		sudo dpkg -i ./docker.deb/docker-ce_18.09.3~3-0~ubuntu-bionic_amd64.deb
 	fi
-	sudo usermod -aG docker $(whoami)
+	USER=$(whoami)
+	sudo usermod -aG docker $USER
 	sudo service docker restart
 	echo -e "\e[32mDocker install finished\e[0m"
 	installDockerCompose
@@ -66,9 +67,10 @@ installDockerCompose(){
 
 
 installHLF(){
+	USER=$(whoami)
 	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
-        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/$(whoami)/work/go/src/github.com/hyperledger/fabric
-	sed -i "\$aexport FABRIC_HOME=/home/$(whoami)/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
+        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/$USER/work/go/src/github.com/hyperledger/fabric
+	sed -i "\$aexport FABRIC_HOME=/home/$USER/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
       	 cd $FABRIC_HOME
 		   case $(hostname) in
 		   		peer) make - peer;;
@@ -103,9 +105,9 @@ echo -e "\e[197mOS Code Name\e[0m			$OS_CODENAME"
 echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
-aptToolInstall
-goInstall
-installDocker
+#aptToolInstall
+#goInstall
+#installDocker
 installHLF
 
 					
