@@ -28,13 +28,12 @@ goInstall(){
 	        echo -e "\e[32mInstall Golang\e[0m"
 		wget -P $HOME/Downloads  https://dl.google.com/go/go1.12.5.${OS}-${CPU_ARCH}.tar.gz
 		tar -C /usr/local -xzf $HOME/Downloads/go1.12.5.${OS}-${CPU_ARCH}.tar.gz
-		sed -i "\$aexport GOROOT=/usr/local/go/" $HOME/.profile
-		. $HOME/.profile
+		sed -i "\$aexport GOROOT=/usr/local/go/" $HOME/.profile		
 		mkdir -p $HOME/work/go/{src,pkg,bin}
 		sed -i "\$aexport GOPATH=\$HOME/work/go" $HOME/.profile
 		sed -i "\$aexport PATH=\$PATH:$GOROOT/bin" $HOME/.profile
 		echo -e "\e[32mGo install finished.\e[0m"
-		cd $HOME
+		. $HOME/.profile
 }
 
 installDocker(){
