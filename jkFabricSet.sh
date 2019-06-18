@@ -89,10 +89,8 @@ installFabricCa(){
 	git clone -v -b release-1.4 --progress https://github.com/hyperledger/fabric-ca/  home/$USER/work/go/src/github.com/hyperledger/fabric-ca
 	cd home/$USER/work/go/src/github.com/hyperledger/fabric-ca
 	case $(hostname) in
-		   		*client*) 	make fabric-ca-server;;
-				   		  	sed -i "\$aexport FABRIC_CA_SERVER_HOME=$HOME/testnet";;
-				*admin*)	make fabric-ca-client;;
-							sed -i "\$aexport FABRIC_CA_CLIENT_HOME=$HOME/testnet";;
+		   		*client*) 	make fabric-ca-server && sed -i "\$aexport FABRIC_CA_SERVER_HOME=$HOME/testnet";;
+				*admin*)	make fabric-ca-client && sed -i "\$aexport FABRIC_CA_CLIENT_HOME=$HOME/testnet";;
 	esac
 	sed -i "\$aexport PATH=$PATH:$GOPATH/src/github.com/hyperledger/fabric-ca/bin" $HOME/.profile
 	source $HOME/.profile
