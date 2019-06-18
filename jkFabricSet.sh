@@ -5,7 +5,9 @@ OS_ID=""
 OS_CODENAME=""
 CPU_ARCH=""
 
-
+#
+# HLF설치시 hostname에 따라 make 명령어가 다릅니다. hostname을 수정하고 사용해주세요.(peer, orderer, admin, kafka etc.)
+#
 # echo "install virtualbox extention"
 # apt-get --assume-yes install virtualbox-guest-dkms
 # apt-get --assume-yes install linux-headers-virtual
@@ -68,7 +70,7 @@ installDockerCompose(){
 installHLF(){
 	USER=`logname`
 	echo -e "\e[32mInstall Hyperledger Fabric 1.4\e[0m"
-        sudo git clone -v --progress https://github.com/hyperledger/fabric.git  /home/$USER/work/go/src/github.com/hyperledger/fabric
+        sudo git clone -v -b release-1.4 --progress https://github.com/hyperledger/fabric  /home/$USER/work/go/src/github.com/hyperledger/fabric
 	sed -i "\$aexport FABRIC_HOME=/home/$USER/work/go/src/github.com/hyperledger/fabric" $HOME/.profile  &&  source $HOME/.profile
       	 cd $FABRIC_HOME
 		   case $(hostname) in
@@ -79,6 +81,21 @@ installHLF(){
 
 	sed -i "\$aexport PATH=\$PATH:$GOPATH/src/github.com/hyperledger/fabric/.build/bin" $HOME/.profile  &&  . $HOME/.profile
 	echo -e "\e[32mHLF install finished.\e[0m"
+}
+
+installFabricCa(){
+	mkdir $HOME/testnet/
+	echo -e "\e[32mInstall Hyperledger Fabric-Ca\e[0m"
+	git clone -v -b release-1.4 --progress https://github.com/hyperledger/fabric-ca/  home/$USER/work/go/src/github.com/hyperledger/fabric-ca
+	cd home/$USER/work/go/src/github.com/hyperledger/fabric-ca
+	case $(hostname) in
+		   		*client*) 	make fabric-ca-server;;
+				   		  	sed -i "\$aexport FABRIC_CA_SERVER_HOME=$HOME/testnet";;
+				*admin*)	make fabric-ca-client;;
+							sed -i "\$aexport FABRIC_CA_CLIENT_HOME=$HOME/testnet";;
+	esac
+	sed -i "\$aexport PATH=$PATH:$GOPATH/src/github.com/hyperledger/fabric-ca/bin" $HOME/.profile
+	source $HOME/.profile
 }
 
 
@@ -104,10 +121,12 @@ echo -e "\e[197mOS Code Name\e[0m			$OS_CODENAME"
 echo -e "\e[197mCPU Architecture\e[0m			$CPU_ARCH"
 fi
 
+
 #aptToolInstall
 #goInstall
 #installDocker
-installHLF
+#installHLF
+installFabricCa
 
 					
 
