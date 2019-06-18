@@ -87,7 +87,7 @@ installFabricCa(){
 	USER=`logname`
 	mkdir $HOME/testnet/
 	echo -e "\e[32mInstall Hyperledger Fabric-Ca\e[0m"
-	git clone -v -b release-1.4 --progress https://github.com/hyperledger/fabric-ca/  /home/$USER/src/github.com/hyperledger/fabric-ca
+	git clone -v -b release-1.4 --progress https://github.com/hyperledger/fabric-ca/  /home/$USER/work/src/github.com/hyperledger/fabric-ca
 	#cd $GOPATH/src/github.com/hyperledger/fabric-ca
 	#case $(hostname) in
 	#	   		*client*) 	make fabric-ca-server && sed -i "\$aexport FABRIC_CA_SERVER_HOME=$HOME/testnet" $HOME/.profile && echo "hi";;
